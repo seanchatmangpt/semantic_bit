@@ -1,49 +1,51 @@
 # Pattern Layer
 
-Complexity is not solved by making a single, massive pattern. It is solved by **layering**. A pattern layer allows us to reason about specific aspects of a system in isolation while maintaining the integrity of the whole.
+Complexity is managed by layering, not by expansion.
+
+In the Semantic Bit, we do not create monolithic structures. We layer simple pattern cells to form sophisticated operational records. Each layer remains bounded and verifiable.
 
 $$
-\boxed{\textbf{A pattern layer is a subset of a graph closure that isolates a specific semantic domain while preserving its relations to other layers.}}
+\boxed{\textbf{Layering is the composition of admitted meanings into a single carrier.}}
 $$
 
----
+## 24.1 The Vertical Stack
 
-## 24.1 Layering by Concern
+A typical operational record is a stack of pattern layers. Consider an access attempt record:
 
-Consider an access control system. We can identify at least three layers:
+1.  **Identity Layer**: Who is presenting the badge? (Subject IRI)
+2.  **Field Layer**: What are the active conditions? (Status8)
+3.  **Result Layer**: What was the selected outcome? (ConditionCode8)
+4.  **Temporal Layer**: When did this occur? (Timestamp)
+5.  **Evidence Layer**: Why was this admitted? (Graph Digest)
 
-1. **The Core Layer**: The raw bits and triples defining the access rule (Badge, Door, Grant).
-2. **The Observation Layer**: The history of attempts and receipts (Events, Epochs, Sequences).
-3. **The Governance Layer**: The authority and evidence that admitted the rules (Signatures, SHACL Shapes).
+Each layer is a distinct pattern cell. The combination of these cells forms the complete record.
 
----
+## 24.2 Independence of Layers
 
-## 24.2 Vertical vs. Horizontal Layering
+A layer must not depend on the internal implementation of the layer beneath it. It depends only on the semantic meaning.
 
-- **Horizontal Layering**: Different domains (e.g., Access vs. Billing) that interact only through admitted interfaces.
-- **Vertical Layering**: Increasing levels of abstraction (e.g., Bit $\rightarrow$ Triple $\rightarrow$ Pattern Cell $\rightarrow$ System).
+The `Status8` layer does not care if the `Identity` layer is a `u64` or a full IRI string in the graph. It only cares that a valid status field is present in the record at the assigned position.
 
----
+## 24.3 Layer Adjacency
 
-## 24.3 Integrity Across Layers
+In memory, layers are adjacent. This is the physical reality of the field.
 
-A pattern layer is not a "silo". It is a view into the same unified graph. A change in the Core Layer must be visible in the Observation Layer if the relations between them are admitted.
-
-$$
-\boxed{\textbf{Layers are logical views; the graph is the single source of truth.}}
-$$
-
----
-
-## 24.4 The Pattern Layer Law
-
-The law of pattern layers ensures that we can scale our understanding without losing the bit-perfect foundation:
-
-```text
-Complexity is managed by layering.
-A layer is a bounded view of the graph.
-Relations cross layer boundaries only through admission.
-The graph closure maintains integrity across all layers.
+```rust
+#[repr(C)]
+struct AccessAttempt {
+    subject_id: u64,       // Identity Layer
+    status: Status8,       // Field Layer
+    outcome: Condition8,   // Result Layer
+    timestamp: u64,        // Temporal Layer
+}
 ```
 
-The system does not separate data. It separates concerns while keeping the data unified.
+The `repr(C)` attribute ensures that the layers are ordered exactly as defined. This allows the system to read the field without parsing.
+
+$$
+\boxed{\textbf{Selection reads the field. It does not parse the record.}}
+$$
+
+## 24.4 Cumulative Meaning
+
+The meaning of the record is the sum of its layers. If one layer is missing or corrupted, the entire record loses its admission status. The manufacturing process ensures that all required layers are present and correctly aligned before a record is emitted.

@@ -1,0 +1,16 @@
+PREFIX insa: <https://w3id.org/insa/ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+SELECT ?field_id ?field_label ?meaning ?mask ?definition ?index
+WHERE {
+  ?field a insa:SemanticField ;
+    insa:hasFieldId ?field_id ;
+    skos:prefLabel ?field_label ;
+    insa:hasPosition ?pos .
+
+  ?pos insa:hasMeaning ?meaning ;
+    insa:hasMask ?mask ;
+    insa:hasIndex ?index ;
+    skos:definition ?definition .
+}
+ORDER BY ?index

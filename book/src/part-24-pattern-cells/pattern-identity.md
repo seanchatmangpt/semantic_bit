@@ -1,55 +1,43 @@
 # Pattern Identity
 
-Every pattern cell must be uniquely identifiable within the semantic universe. A pattern is not just "some" access control; it is **this** access control pattern, governed by **this** version of the law.
+A pattern is not a suggestion. It is a named structure with a stable identity.
+
+In the semantic field, we do not admit anonymous structures. Every pattern cell must be identified by a unique URI or a stable numeric index. This identity allows the system to refer to the pattern across different layers of manufacture without ambiguity.
+
+Identity is the first requirement of admission.
 
 $$
-\boxed{\textbf{Pattern identity is the stable IRI that uniquely designates a pattern cell's definition and its admitted structure.}}
+\boxed{\textbf{A pattern without identity is noise. A pattern with identity is a cell.}}
 $$
 
----
+## 24.1 The Stable URI
 
-## 24.1 Identification by IRI
+We use Internationalized Resource Identifiers (IRIs) to provide global identity to pattern cells. An IRI does not point to a location; it names a concept.
 
-We use Internationalized Resource Identifiers (IRIs) to name patterns. An IRI provides a global namespace, preventing collisions between different engineering traditions.
+For example, the identity of the Access Field pattern might be:
 
-```turtle
-# The identity of the Access Control pattern
-@prefix pattern: <https://semanticbit.io/pattern/> .
+`https://semantic-bit.org/pattern/access-field`
 
-pattern:AccessControl a pattern:Cell ;
-    rdfs:label "Access Control Pattern" ;
-    pattern:version "1.0.0" .
-```
+This identity remains constant even if the physical representation of the field changes from a `u8` to a `u64`. The identity binds the semantic meaning to the structural requirement.
 
----
+## 24.2 Numeric Aliasing
 
-## 24.2 Identification by Digest
+In the critical operational path, IRIs are too wide. We alias stable IRIs to fixed-width numeric identities.
 
-While the IRI names the *definition* of the pattern, a specific *instance* of a pattern in a graph is identified by the digest of its relations.
+| IRI Alias                           | Numeric ID | Semantic Cell      |
+| :---------------------------------- | ---------: | :----------------- |
+| `sb:pattern/access-field`           |     `0x01` | Access Field       |
+| `sb:pattern/control-record`         |     `0x02` | Control Record     |
+| `sb:pattern/status-8`               |     `0x03` | Status Field       |
 
-If two graphs contain the exact same set of relations forming an "Access Control" cell, the pattern cell instances are identical. If one triple changes, the identity of that specific instance changes.
+The numeric ID is used for high-speed selection and dispatch. The IRI is used for manufacture and auditing.
 
----
+## 24.3 Identity Persistence
 
-## 24.3 The Identity of Law
+The identity of a pattern must persist through the manufacturing loop. When a Rust struct is generated from an RDF graph, the identity of the source pattern must be preserved in the metadata of the generated artifact.
 
-A pattern cell's identity is inextricably linked to the law that governs it. If the selection rule for a pattern changes, it is effectively a new pattern.
+If the identity is lost, the receipt cannot be verified.
 
 $$
-\boxed{\textbf{The identity of the law is the identity of the pattern.}}
+\boxed{\textbf{The receipt preserves the identity of the law that governed the action.}}
 $$
-
----
-
-## 24.4 The Pattern Identity Law
-
-The law of pattern identity ensures that we always know what we are observing:
-
-```text
-A pattern is named by an admitted IRI.
-The definition is versioned and stable.
-An instance is identified by its stable graph form.
-Change the law, and you change the identity.
-```
-
-The system does not act on anonymous structures. It acts on identified patterns.

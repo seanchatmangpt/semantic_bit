@@ -1,3 +1,3 @@
 # Activation Selection Law
 
-[Content placeholder generated for Activation Selection Law]
+This section formally defines the Activation Selection Law. It lays out the strict rules and invariants that must be upheld to ensure that meaning is preserved and bounded before any motion is authorized.

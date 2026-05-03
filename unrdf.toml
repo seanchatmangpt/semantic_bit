@@ -1,0 +1,85 @@
+[project]
+name = "semantic_bit"
+version = "0.1.0"
+
+[ontology]
+source = "ontology/fields/spine.ttl"
+format = "turtle"
+
+[generation]
+output_dir = "src"
+
+[[generation.rules]]
+name = "rust-access"
+template = "templates/rust/field.rs.njk"
+output_file = "access.rs"
+query = """
+PREFIX insa: <https://w3id.org/insa/ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+SELECT ?field_id ?field_label ?meaning ?mask ?definition ?index ?slug
+WHERE {
+  VALUES ?slug { "access" }
+  ?field a insa:SemanticField ;
+    insa:hasFieldId ?field_id ;
+    insa:hasSlug ?slug ;
+    skos:prefLabel ?field_label ;
+    insa:hasPosition ?pos .
+
+  ?pos insa:hasMeaning ?meaning ;
+    insa:hasMask ?mask ;
+    insa:hasIndex ?index ;
+    skos:definition ?definition .
+}
+ORDER BY ?index
+"""
+
+[[generation.rules]]
+name = "rust-status8"
+template = "templates/rust/field.rs.njk"
+output_file = "status8.rs"
+query = """
+PREFIX insa: <https://w3id.org/insa/ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+SELECT ?field_id ?field_label ?meaning ?mask ?definition ?index ?slug
+WHERE {
+  VALUES ?slug { "status8" }
+  ?field a insa:SemanticField ;
+    insa:hasFieldId ?field_id ;
+    insa:hasSlug ?slug ;
+    skos:prefLabel ?field_label ;
+    insa:hasPosition ?pos .
+
+  ?pos insa:hasMeaning ?meaning ;
+    insa:hasMask ?mask ;
+    insa:hasIndex ?index ;
+    skos:definition ?definition .
+}
+ORDER BY ?index
+"""
+
+[[generation.rules]]
+name = "rust-condition8"
+template = "templates/rust/field.rs.njk"
+output_file = "condition8.rs"
+query = """
+PREFIX insa: <https://w3id.org/insa/ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+SELECT ?field_id ?field_label ?meaning ?mask ?definition ?index ?slug
+WHERE {
+  VALUES ?slug { "condition8" }
+  ?field a insa:SemanticField ;
+    insa:hasFieldId ?field_id ;
+    insa:hasSlug ?slug ;
+    skos:prefLabel ?field_label ;
+    insa:hasPosition ?pos .
+
+  ?pos insa:hasMeaning ?meaning ;
+    insa:hasMask ?mask ;
+    insa:hasIndex ?index ;
+    skos:definition ?definition .
+}
+ORDER BY ?index
+"""
