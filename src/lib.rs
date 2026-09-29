@@ -11,6 +11,7 @@ pub mod journal;
 pub mod checkpoint;
 pub mod restart;
 pub mod contract;
+pub mod effect_identity;
 
 pub mod status8;
 pub mod condition_code8;
